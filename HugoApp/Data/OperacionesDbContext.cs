@@ -18,7 +18,7 @@ namespace taskmanager_webservice.Data
         {
             modelBuilder.Entity<Usuario>(entity =>
             {
-                entity.ToTable("usuarios"); // Asegúrate de que sea "usuarios" en minúsculas
+                entity.ToTable("usuarios"); 
 
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.Nombre).HasColumnName("nombre");
