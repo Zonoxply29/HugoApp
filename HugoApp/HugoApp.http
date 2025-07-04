@@ -1,0 +1,6 @@
+@HugoApp_HostAddress = http://localhost:5234
+
+GET {{HugoApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
