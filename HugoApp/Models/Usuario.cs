@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace taskmanager_webservice.Models
 {
@@ -10,7 +11,8 @@ namespace taskmanager_webservice.Models
         public string Nombre { get; set; }
         public string CorreoElectronico { get; set; }
         public string Contraseña { get; set; }
-
+        
+        [JsonIgnore]
         public ICollection<Tarea> Tareas { get; set; } = new List<Tarea>();
 
         public void SetPassword(string password)

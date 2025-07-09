@@ -11,6 +11,7 @@
         public int UsuarioId { get; set; }
 
         // (Opcional pero recomendable) Navegación a Usuario
+        [JsonIgnore]
         public Usuario? Usuario { get; set; }
     }
 }
