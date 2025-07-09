@@ -1,4 +1,7 @@
-﻿namespace taskmanager_webservice.Models
+﻿using System.Text.Json.Serialization;
+
+namespace taskmanager_webservice.Models
+
 {
     public class Tarea
     {
