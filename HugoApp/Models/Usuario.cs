@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Collections.Generic;
 using System.Text;
 
 namespace taskmanager_webservice.Models
@@ -10,7 +11,8 @@ namespace taskmanager_webservice.Models
         public string CorreoElectronico { get; set; }
         public string Contraseña { get; set; }
 
-       
+        public ICollection<Tarea> Tareas { get; set; }
+
         public void SetPassword(string password)
         {
             
