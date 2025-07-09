@@ -43,21 +43,29 @@ namespace HugoApp.Controllers
         [HttpPost]
         public async Task<ActionResult<Tarea>> PostTarea(Tarea tarea)
         {
-            var correo = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+            try
+            {
+                var correo = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
 
-            if (string.IsNullOrEmpty(correo))
-                return Unauthorized();
+                if (string.IsNullOrEmpty(correo))
+                    return Unauthorized("Token no válido o no proporcionado.");
 
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoElectronico == correo);
-            if (usuario == null)
-                return NotFound("Usuario no encontrado");
+                var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoElectronico == correo);
+                if (usuario == null)
+                    return NotFound("Usuario no encontrado.");
 
-            tarea.UsuarioId = usuario.Id;
+                tarea.UsuarioId = usuario.Id;
 
-            _context.Tareas.Add(tarea);
-            await _context.SaveChangesAsync();
+                _context.Tareas.Add(tarea);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetTareasDelUsuario), new { id = tarea.Id }, tarea);
+                return CreatedAtAction(nameof(GetTareasDelUsuario), new { id = tarea.Id }, tarea);
+            }
+            catch (Exception ex)
+            {
+                // Esto te ayudará a ver el error específico en los logs
+                return StatusCode(500, new { message = "Error al crear la tarea", error = ex.Message });
+            }
         }
 
 
