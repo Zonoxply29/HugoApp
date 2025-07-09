@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using taskmanager_webservice.Data;
 using taskmanager_webservice.Models;
 using System.Linq;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace HugoApp.Controllers
 {
@@ -10,11 +14,12 @@ namespace HugoApp.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly OperacionesDbContext _context;
+        private readonly string _jwtSecret;
 
         public AuthController(OperacionesDbContext context)
         {
             _context = context;
+            _jwtSecret = configuration["Jwt:Key"];
         }
 
         // POST: api/auth/register
@@ -50,8 +55,29 @@ namespace HugoApp.Controllers
                 return Unauthorized("Correo o contraseña incorrectos");
             }
 
-            // Aquí podrías devolver un JWT Token (pero por ahora, devolveremos un mensaje)
-            return Ok(new { Message = "Login exitoso" });
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSecret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+            new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+            new Claim(ClaimTypes.Email, usuario.CorreoElectronico)
+        }),
+                Expires = DateTime.UtcNow.AddHours(2),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return Ok(new
+            {
+                message = "Login exitoso",
+                token = tokenString
+            });
         }
     }
 }
