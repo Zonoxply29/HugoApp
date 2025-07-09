@@ -14,12 +14,15 @@ namespace HugoApp.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly OperacionesDbContext _context;
+        private readonly IConfiguration _configuration;
         private readonly string _jwtSecret;
 
-        public AuthController(OperacionesDbContext context)
+        public AuthController(OperacionesDbContext context, IConfiguration configuration)
         {
             _context = context;
-            _jwtSecret = configuration["Jwt:Key"];
+            _configuration = configuration;
+            _jwtSecret = _configuration["Jwt:Key"];
         }
 
         // POST: api/auth/register
