@@ -68,6 +68,8 @@ namespace HugoApp.Controllers
             new Claim(ClaimTypes.Email, usuario.CorreoElectronico)
         }),
                 Expires = DateTime.UtcNow.AddHours(2),
+                Issuer = _configuration["Jwt:Issuer"],       
+                Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
