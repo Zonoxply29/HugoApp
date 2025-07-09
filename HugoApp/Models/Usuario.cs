@@ -11,7 +11,7 @@ namespace taskmanager_webservice.Models
         public string CorreoElectronico { get; set; }
         public string Contraseña { get; set; }
 
-        public ICollection<Tarea> Tareas { get; set; }
+        public ICollection<Tarea> Tareas { get; set; } = new List<Tarea>();
 
         public void SetPassword(string password)
         {
